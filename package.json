@@ -2,10 +2,12 @@
   "name": "elevator-code-challenge",
   "version": "1.0.0",
   "description": "elevator code challenge typescript solution",
-  "main": "index.js",
   "repository": "https://github.com/chrischenyc/elevator-code-challenge",
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix"
+  },
   "devDependencies": {
     "lerna": "^3.20.2",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
