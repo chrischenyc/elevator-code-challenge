@@ -1,0 +1,8 @@
+{
+  "name": "engine",
+  "version": "1.0.0",
+  "description": "core algorithm, client-agnostic",
+  "main": "index.js",
+  "author": "Chris Chen (chris@capturelabs.com)",
+  "license": "MIT"
+}
