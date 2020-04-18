@@ -1,0 +1,9 @@
+node_modules
+vscode/
+
+backend/webpack.config.js
+backedn/.serverless/
+
+frontend/.next/
+
+terraform/

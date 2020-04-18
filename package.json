@@ -7,6 +7,33 @@
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^3.20.2"
+    "lerna": "^3.20.2",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-jest": "^23.6.0",
+    "eslint-plugin-nestjs": "^1.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
+    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "husky": "^4.0.10",
+    "lint-staged": "^10.0.0",
+    "prettier": "^1.18.2",
+    "typescript": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
