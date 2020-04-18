@@ -2,7 +2,13 @@
   "name": "engine",
   "version": "1.0.0",
   "description": "core algorithm, client-agnostic",
-  "main": "index.js",
   "author": "Chris Chen (chris@capturelabs.com)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/uuid": "^7.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "uuid": "^7.0.3"
+  }
 }
