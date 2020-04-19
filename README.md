@@ -1,5 +1,7 @@
 # Elevator Code Challenge - Typescript Solution
 
+![elevator-code-challenge CI/CD](https://github.com/chrischenyc/elevator-code-challenge/workflows/elevator-code-challenge%20CI/CD/badge.svg?branch=master)
+
 ## Problem
 
 > You are in charge of writing software for an elevator (lift) company.
@@ -34,6 +36,8 @@ the solution assumes European/Australasian floor number convention, i.e.: floor 
 
 ## Run
 
-## Test
+## CI/CD
+
+[GitHub Actions](https://github.com/chrischenyc/elevator-code-challenge/actions)
 
 ## TODO
