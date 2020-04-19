@@ -3,12 +3,16 @@ import { v4 as uuidv4 } from 'uuid';
 import EventLoop from './event-loop';
 
 export enum ElevatorStatus {
-  NOT_IN_OPERATION, // elevator can't be used
-  STOPPING_OPERATION, // interim status from GOING_UP/GOING_DOWN to NOT_IN_OPERATION
-  IDLE, // elevator is idle on a certain floor
-  UP, // elevator is moving up
-  DOWN, // elevator is moving down
+  STOPPED, // not in service
+  STOPPING, // interim status before elevator goes out of service
+  IDLE, // idle on a certain floor
   LOADING, // loading/unloading passengers
+  MOVING, // moving up or down
+}
+
+export enum ElevatorDirection {
+  UP, // elevator will continue going up
+  DOWN, // elevator will continue going down
 }
 
 class Elevator {
@@ -19,9 +23,10 @@ class Elevator {
   public readonly loadingDuration: number; // seconds the elevator needs for loading/unloading passenger(s)
 
   // run-time variables when elevator is in operation
-  public maxFloor: number;
+  public maxFloor = 0;
   public floor = 0; // floor a idle/loading elevator is staying on, or the next floor a moving elevator is approaching
-  public status: ElevatorStatus = ElevatorStatus.NOT_IN_OPERATION;
+  public status: ElevatorStatus = ElevatorStatus.STOPPED;
+  public direction?: ElevatorDirection;
   public passengers: Passenger[] = [];
   public queue: Passenger[] = []; // FIFO queue
   private readonly eventLoop: EventLoop;
@@ -35,7 +40,6 @@ class Elevator {
     this.capacity = capacity;
     this.speed = speed;
     this.loadingDuration = loadingDuration;
-    this.maxFloor = 0;
     this.eventLoop = new EventLoop(this.eventLoopAction, this.speed);
   }
 
@@ -50,7 +54,7 @@ class Elevator {
   }
 
   public startOperation(): void {
-    if (this.status != ElevatorStatus.NOT_IN_OPERATION) {
+    if (this.status != ElevatorStatus.STOPPED) {
       return;
     }
     this.status = ElevatorStatus.IDLE;
@@ -59,13 +63,13 @@ class Elevator {
 
   /**
    * If the elevator is not moving, put it out of service immediately, elevator stays on the floor as is;
-   * If the elevator is moving, transit its status to STOPPING_OPERATION, elevator will move to the next destination, and stay there;
+   * If the elevator is moving, transit its status to STOPPING, elevator will move to the next destination, and stay there;
    */
   public stopOperation(): void {
-    if (this.status === ElevatorStatus.UP || this.status === ElevatorStatus.DOWN) {
-      this.status = ElevatorStatus.STOPPING_OPERATION;
+    if (this.status === ElevatorStatus.MOVING) {
+      this.status = ElevatorStatus.STOPPING;
     } else {
-      this.status = ElevatorStatus.NOT_IN_OPERATION;
+      this.status = ElevatorStatus.STOPPED;
       this.eventLoop.stop();
     }
   }
@@ -78,8 +82,8 @@ class Elevator {
    * return: Number.MAX_SAFE_INTEGER if the elevator can't arrive the designated floor
    */
   public arrivingTimeToFloor(floor: number): number {
-    // filter out elevator that has stopped or is stopping operation
-    if (this.status === ElevatorStatus.NOT_IN_OPERATION || this.status === ElevatorStatus.STOPPING_OPERATION) {
+    // filter out elevator that has stopped or is stopping
+    if (this.status === ElevatorStatus.STOPPED || this.status === ElevatorStatus.STOPPING) {
       return Number.MAX_SAFE_INTEGER;
     }
 
@@ -93,24 +97,27 @@ class Elevator {
       return 0;
     }
 
-    // TODO: otherwise, need to calculate the shortest time the elevator might take without affecting existing passengers
-    return Math.abs(floor - this.floor) * this.speed;
+    // TODO: otherwise, need to calculate the shortest time for elevator to arrive without affecting current passengers
+    return Number.MAX_SAFE_INTEGER;
   }
 
   public enqueuePassenger(passenger: Passenger): void {
     this.queue.push(passenger);
-    // TODO: re-arrange FIFO queue
   }
 
   public dequeuePassenger(passenger: Passenger): void {
     this.queue.splice(this.queue.indexOf(passenger), 1);
-    // TODO: re-arrange FIFO queue
   }
 
   /**
    * elevator state-machine goes here:
    */
-  private eventLoopAction(): void {}
+  private eventLoopAction(): void {
+    switch (this.status) {
+      case ElevatorStatus.STOPPED:
+        break;
+    }
+  }
 }
 
 export default Elevator;

@@ -9,7 +9,7 @@ describe('Elevator', () => {
       expect(sampleElevator.speed).toBeGreaterThan(0);
       expect(sampleElevator.loadingDuration).toBeGreaterThan(0);
       expect(sampleElevator.floor).toEqual(0);
-      expect(sampleElevator.status).toEqual(ElevatorStatus.NOT_IN_OPERATION);
+      expect(sampleElevator.status).toEqual(ElevatorStatus.STOPPED);
       expect(sampleElevator.passengers.length).toEqual(0);
       expect(sampleElevator.queue.length).toEqual(0);
     });
@@ -47,13 +47,13 @@ describe('Elevator', () => {
       elevator.stopOperation();
     });
 
-    it('should change an elevator status only when it is NOT_IN_OPERATION', () => {
+    it('should change an elevator status only when it is STOPPED', () => {
       elevator.startOperation();
       expect(elevator.status).toEqual(ElevatorStatus.IDLE);
     });
 
-    it('should do nothing if elevator has other status than NOT_IN_OPERATION', () => {
-      const statusToTest = [ElevatorStatus.DOWN, ElevatorStatus.UP, ElevatorStatus.LOADING, ElevatorStatus.STOPPING_OPERATION];
+    it('should do nothing if elevator has other status than STOPPED', () => {
+      const statusToTest = [ElevatorStatus.MOVING, ElevatorStatus.LOADING, ElevatorStatus.STOPPING];
       statusToTest.forEach(status => {
         elevator.status = status;
         elevator.startOperation();
@@ -71,25 +71,20 @@ describe('Elevator', () => {
     });
 
     it('should stop an elevator only when it is not moving', () => {
-      const statusToTest = [
-        ElevatorStatus.LOADING,
-        ElevatorStatus.STOPPING_OPERATION,
-        ElevatorStatus.IDLE,
-        ElevatorStatus.NOT_IN_OPERATION,
-      ];
+      const statusToTest = [ElevatorStatus.LOADING, ElevatorStatus.STOPPING, ElevatorStatus.IDLE, ElevatorStatus.STOPPED];
       statusToTest.forEach(status => {
         elevator.status = status;
         elevator.stopOperation();
-        expect(elevator.status).toEqual(ElevatorStatus.NOT_IN_OPERATION);
+        expect(elevator.status).toEqual(ElevatorStatus.STOPPED);
       });
     });
 
     it('should set an elevator to interim status if it is moving', () => {
-      const statusToTest = [ElevatorStatus.DOWN, ElevatorStatus.UP];
+      const statusToTest = [ElevatorStatus.MOVING];
       statusToTest.forEach(status => {
         elevator.status = status;
         elevator.stopOperation();
-        expect(elevator.status).toEqual(ElevatorStatus.STOPPING_OPERATION);
+        expect(elevator.status).toEqual(ElevatorStatus.STOPPING);
       });
     });
   });

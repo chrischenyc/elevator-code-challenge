@@ -60,7 +60,7 @@ class Building {
   private eventLoopAction(): void {
     this.queue.forEach(passenger => {
       const elevatorsOrderedByArrivingTime = this.elevators
-        .filter(elevator => elevator.status !== ElevatorStatus.NOT_IN_OPERATION && elevator.status !== ElevatorStatus.STOPPING_OPERATION)
+        .filter(elevator => elevator.status !== ElevatorStatus.STOPPED && elevator.status !== ElevatorStatus.STOPPING)
         .sort((a, b) => {
           return a.arrivingTimeToFloor(passenger.originFloor) - b.arrivingTimeToFloor(passenger.originFloor);
         });
