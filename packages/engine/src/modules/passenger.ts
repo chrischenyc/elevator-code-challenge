@@ -10,9 +10,13 @@ class Passenger {
   }
 
   public static randomPassenger(buildingFloors: number): Passenger {
-    const originFloor = randomInteger(0, buildingFloors - 1);
+    if (buildingFloors <= 1) {
+      throw new Error('Passenger: invalid building floors');
+    }
 
+    const originFloor = randomInteger(0, buildingFloors - 1);
     let destinationFloor = randomInteger(0, buildingFloors - 1);
+
     while (originFloor === destinationFloor) {
       destinationFloor = randomInteger(0, buildingFloors - 1);
     }

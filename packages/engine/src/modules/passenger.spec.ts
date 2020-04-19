@@ -17,5 +17,17 @@ describe('Passenger', () => {
 
       expect(passenger.originFloor).not.toEqual(passenger.destinationFloor);
     });
+
+    it('should ensure origin floor and destination floor are not same', () => {
+      const passenger = Passenger.randomPassenger(2);
+
+      expect(passenger.originFloor).not.toEqual(passenger.destinationFloor);
+    });
+  });
+
+  it('should throw an error if building floors are less than 2', () => {
+    expect(() => {
+      Passenger.randomPassenger(1);
+    }).toThrowError();
   });
 });
