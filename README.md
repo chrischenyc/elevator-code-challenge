@@ -21,22 +21,23 @@
 
 the solution assumes European/Australasian floor number convention, i.e.: floor 0 is G floor
 
-## Design Patterns, Principles, and Practices
+## Patterns & Principles
 
 - [Monorepo](https://en.wikipedia.org/wiki/Monorepo)
 - [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) & [SOLID](https://en.wikipedia.org/wiki/SOLID)
 - [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
-- [event loop](https://en.wikipedia.org/wiki/Event_loop) & [state machine](https://en.wikipedia.org/wiki/Finite-state_machine)
+- [event loop](https://en.wikipedia.org/wiki/Event_loop)
+- [state machine](https://en.wikipedia.org/wiki/Finite-state_machine)
 - [client agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>)
 
 ## Project Structure
 
+TODO
+
 ## Data Models
+
+TODO
 
 ## Run
 
-## CI/CD
-
-[GitHub Actions](https://github.com/chrischenyc/elevator-code-challenge/actions)
-
-## TODO
+TODO

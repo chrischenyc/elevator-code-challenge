@@ -15,7 +15,7 @@ class Elevator {
   // immutable specs when elevator is manufactured
   public readonly id: string; // uuid
   public readonly capacity: number; // number of passengers the elevator can load
-  public readonly speed: number; // number of floors the elevator can travel per second
+  public readonly speed: number; // seconds the elevator needs to travel one floor
   public readonly loadingDuration: number; // seconds the elevator needs for loading/unloading passenger(s)
 
   // run-time variables when elevator is in operation
@@ -24,32 +24,29 @@ class Elevator {
   public status: ElevatorStatus = ElevatorStatus.NOT_IN_OPERATION;
   public passengers: Passenger[] = [];
   public queue: Passenger[] = []; // FIFO queue
-  private readonly eventLoop: EventLoop = new EventLoop(this.eventLoopAction);
+  private readonly eventLoop: EventLoop;
 
   //
   /**
    * client can call this constructor to generate an elevator with customised specs
-   * @param capacity - number of passengers the elevator can load
-   * @param speed - number of floors the elevator can travel per second
-   * @param loadingDuration - seconds the elevator needs for loading/unloading passenger(s)
    */
   constructor(capacity: number, speed: number, loadingDuration: number) {
     this.id = uuidv4();
-    // TODO: EventLoop instance
     this.capacity = capacity;
     this.speed = speed;
     this.loadingDuration = loadingDuration;
     this.maxFloor = 0;
+    this.eventLoop = new EventLoop(this.eventLoopAction, this.speed);
   }
 
   /**
    * client can call this factory method to quickly generate sample elevator instance with following specs:
    * max capacity: 12 passengers
-   * speed: 2 seconds / floor, or 0.5 floor / second
+   * speed: 2 seconds / floor
    * loading time: 10 seconds
    */
   public static sampleElevator(): Elevator {
-    return new Elevator(12, 0.5, 10);
+    return new Elevator(12, 2, 10);
   }
 
   public startOperation(): void {
@@ -73,9 +70,47 @@ class Elevator {
     }
   }
 
-  private eventLoopAction(): void {
-    // elevator state-machine goes here
+  /**
+   * calculate the optimal time for the elevator to arrive the designated floor
+   *
+   * @param floor - floor number where a passenger is calling for an elevator
+   *
+   * return: Number.MAX_SAFE_INTEGER if the elevator can't arrive the designated floor
+   */
+  public arrivingTimeToFloor(floor: number): number {
+    // filter out elevator that has stopped or is stopping operation
+    if (this.status === ElevatorStatus.NOT_IN_OPERATION || this.status === ElevatorStatus.STOPPING_OPERATION) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+
+    // idle elevator can move directly to the designated floor
+    if (this.status === ElevatorStatus.IDLE) {
+      return Math.abs(floor - this.floor) * this.speed;
+    }
+
+    // if the loading elevator happens to be on the designated floor, it takes no time
+    if (this.status === ElevatorStatus.LOADING && this.floor === floor) {
+      return 0;
+    }
+
+    // TODO: otherwise, need to calculate the shortest time the elevator might take without affecting existing passengers
+    return Math.abs(floor - this.floor) * this.speed;
   }
+
+  public enqueuePassenger(passenger: Passenger): void {
+    this.queue.push(passenger);
+    // TODO: re-arrange FIFO queue
+  }
+
+  public dequeuePassenger(passenger: Passenger): void {
+    this.queue.splice(this.queue.indexOf(passenger), 1);
+    // TODO: re-arrange FIFO queue
+  }
+
+  /**
+   * elevator state-machine goes here:
+   */
+  private eventLoopAction(): void {}
 }
 
 export default Elevator;

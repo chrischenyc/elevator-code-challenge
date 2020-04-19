@@ -1,6 +1,6 @@
-import Elevator from 'modules/elevator';
-import Passenger from 'modules/passenger';
 import EventLoop from './event-loop';
+import Elevator, { ElevatorStatus } from './elevator';
+import Passenger from './passenger';
 
 class Building {
   public readonly floors: number;
@@ -50,8 +50,28 @@ class Building {
     this.queue.push(passenger);
   }
 
+  public dequeuePassenger(passenger: Passenger): void {
+    this.queue.splice(this.queue.indexOf(passenger), 1);
+  }
+
+  /**
+   * passenger -> elevator dispatching: attempt to dispatch the passengers to the available elevators that arrive with least time respectively
+   */
   private eventLoopAction(): void {
-    // building elevator dispatcher state-machine goes here
+    this.queue.forEach(passenger => {
+      const elevatorsOrderedByArrivingTime = this.elevators
+        .filter(elevator => elevator.status !== ElevatorStatus.NOT_IN_OPERATION && elevator.status !== ElevatorStatus.STOPPING_OPERATION)
+        .sort((a, b) => {
+          return a.arrivingTimeToFloor(passenger.originFloor) - b.arrivingTimeToFloor(passenger.originFloor);
+        });
+
+      // enqueue passenger to the available elevator that requires least arriving time
+      if (elevatorsOrderedByArrivingTime.length > 0) {
+        const elevator = elevatorsOrderedByArrivingTime[0];
+        elevator.enqueuePassenger(passenger);
+        this.dequeuePassenger(passenger);
+      }
+    });
   }
 }
 

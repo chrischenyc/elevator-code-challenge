@@ -23,15 +23,15 @@ describe('Elevator', () => {
 
   describe('constructor', () => {
     it('should instantiate an elevator instance with given specs', () => {
-      const elevator = new Elevator(15, 0.25, 15);
+      const elevator = new Elevator(15, 2, 15);
       expect(elevator.capacity).toEqual(15);
-      expect(elevator.speed).toEqual(0.25);
+      expect(elevator.speed).toEqual(2);
       expect(elevator.loadingDuration).toEqual(15);
     });
 
     it('should instantiate multiple elevator instances with unique ids', () => {
-      const elevator1 = new Elevator(20, 0.2, 12);
-      const elevator2 = new Elevator(20, 0.2, 12);
+      const elevator1 = new Elevator(20, 3, 12);
+      const elevator2 = new Elevator(20, 3, 12);
       expect(elevator1.id).not.toEqual(elevator2.id);
     });
   });
