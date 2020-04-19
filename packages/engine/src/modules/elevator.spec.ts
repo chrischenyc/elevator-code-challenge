@@ -43,6 +43,10 @@ describe('Elevator', () => {
       elevator = Elevator.sampleElevator();
     });
 
+    afterEach(() => {
+      elevator.stopOperation();
+    });
+
     it('should change an elevator status only when it is NOT_IN_OPERATION', () => {
       elevator.startOperation();
       expect(elevator.status).toEqual(ElevatorStatus.IDLE);
@@ -63,6 +67,7 @@ describe('Elevator', () => {
 
     beforeAll(() => {
       elevator = Elevator.sampleElevator();
+      elevator.startOperation();
     });
 
     it('should stop an elevator only when it is not moving', () => {

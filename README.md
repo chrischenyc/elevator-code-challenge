@@ -1,6 +1,6 @@
 # Elevator Code Challenge - Typescript Solution
 
-![CI/CD](https://github.com/chrischenyc/elevator-code-challenge/workflows/CI/CD/badge.svg?branch=master)
+[![CI/CD](https://github.com/chrischenyc/elevator-code-challenge/workflows/CI/CD/badge.svg?branch=master)](https://github.com/chrischenyc/elevator-code-challenge/actions)
 [![codecov](https://codecov.io/gh/chrischenyc/elevator-code-challenge/branch/master/graph/badge.svg)](https://codecov.io/gh/chrischenyc/elevator-code-challenge)
 
 ## Problem
@@ -23,13 +23,11 @@ the solution assumes European/Australasian floor number convention, i.e.: floor 
 
 ## Design Patterns, Principles, and Practices
 
-- [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming)
-- [SOLID](https://en.wikipedia.org/wiki/SOLID)
-- [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
-- [event loop](https://en.wikipedia.org/wiki/Event_loop)
-- [state machine](https://en.wikipedia.org/wiki/Finite-state_machine)
-- [client agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>)
 - [Monorepo](https://en.wikipedia.org/wiki/Monorepo)
+- [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) & [SOLID](https://en.wikipedia.org/wiki/SOLID)
+- [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
+- [event loop](https://en.wikipedia.org/wiki/Event_loop) & [state machine](https://en.wikipedia.org/wiki/Finite-state_machine)
+- [client agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>)
 
 ## Project Structure
 

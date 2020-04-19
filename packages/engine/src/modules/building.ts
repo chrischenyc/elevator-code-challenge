@@ -1,10 +1,12 @@
 import Elevator from 'modules/elevator';
 import Passenger from 'modules/passenger';
+import EventLoop from './event-loop';
 
 class Building {
   public readonly floors: number;
   public readonly elevators: Elevator[] = [];
-  public readonly queue: Passenger[] = [];
+  public readonly queue: Passenger[] = []; // FIFO queue
+  private readonly eventLoop: EventLoop = new EventLoop(this.eventLoopAction);
 
   constructor(floors: number) {
     this.floors = floors;
@@ -35,15 +37,21 @@ class Building {
   }
 
   public startOperation(): void {
+    this.eventLoop.start();
     this.elevators.forEach(elevator => elevator.startOperation());
   }
 
   public stopOperation(): void {
     this.elevators.forEach(elevator => elevator.stopOperation());
+    this.eventLoop.stop();
   }
 
   public enqueuePassenger(passenger: Passenger): void {
     this.queue.push(passenger);
+  }
+
+  private eventLoopAction(): void {
+    // building elevator dispatcher state-machine goes here
   }
 }
 

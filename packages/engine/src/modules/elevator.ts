@@ -1,5 +1,6 @@
 import Passenger from './passenger';
 import { v4 as uuidv4 } from 'uuid';
+import EventLoop from './event-loop';
 
 export enum ElevatorStatus {
   NOT_IN_OPERATION, // elevator can't be used
@@ -22,9 +23,8 @@ class Elevator {
   public floor = 0; // floor a idle/loading elevator is staying on, or the next floor a moving elevator is approaching
   public status: ElevatorStatus = ElevatorStatus.NOT_IN_OPERATION;
   public passengers: Passenger[] = [];
-  public queue: Passenger[] = [];
-
-  // TODO: EventLoop property
+  public queue: Passenger[] = []; // FIFO queue
+  private readonly eventLoop: EventLoop = new EventLoop(this.eventLoopAction);
 
   //
   /**
@@ -57,6 +57,7 @@ class Elevator {
       return;
     }
     this.status = ElevatorStatus.IDLE;
+    this.eventLoop.start();
   }
 
   /**
@@ -68,7 +69,12 @@ class Elevator {
       this.status = ElevatorStatus.STOPPING_OPERATION;
     } else {
       this.status = ElevatorStatus.NOT_IN_OPERATION;
+      this.eventLoop.stop();
     }
+  }
+
+  private eventLoopAction(): void {
+    // elevator state-machine goes here
   }
 }
 
