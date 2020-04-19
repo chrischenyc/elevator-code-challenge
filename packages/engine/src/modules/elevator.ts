@@ -18,6 +18,7 @@ class Elevator {
   public readonly loadingDuration: number; // seconds the elevator needs for loading/unloading passenger(s)
 
   // run-time variables when elevator is in operation
+  public maxFloor: number;
   public floor = 0; // floor a idle/loading elevator is staying on, or the next floor a moving elevator is approaching
   public status: ElevatorStatus = ElevatorStatus.NOT_IN_OPERATION;
   public passengers: Passenger[] = [];
@@ -38,6 +39,7 @@ class Elevator {
     this.capacity = capacity;
     this.speed = speed;
     this.loadingDuration = loadingDuration;
+    this.maxFloor = 0;
   }
 
   /**

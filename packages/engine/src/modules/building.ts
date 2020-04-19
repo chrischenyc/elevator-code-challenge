@@ -20,7 +20,7 @@ class Building {
     }
 
     this.elevators.push(elevator);
-
+    elevator.maxFloor = this.floors - 1;
     elevator.startOperation();
   }
 
