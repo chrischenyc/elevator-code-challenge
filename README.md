@@ -1,7 +1,7 @@
 # Elevator Code Challenge - Typescript Solution
 
 ![CI/CD](https://github.com/chrischenyc/elevator-code-challenge/workflows/CI/CD/badge.svg?branch=master)
-![Codecov](https://img.shields.io/codecov/c/github/chrischenyc/elevator-code-challenge)
+[![codecov](https://codecov.io/gh/chrischenyc/elevator-code-challenge/branch/master/graph/badge.svg)](https://codecov.io/gh/chrischenyc/elevator-code-challenge)
 
 ## Problem
 
