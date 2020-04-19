@@ -14,7 +14,9 @@
 > - Passenger 1 summons lift to go up from L2. Passenger 2 summons lift to go down from L4. Passenger 1 chooses to go to L6. Passenger 2 chooses to go to Ground Floor
 > - Passenger 1 summons lift to go up from Ground. They choose L5. Passenger 2 summons lift to go down from L4. Passenger 3 summons lift to go down from L10. Passengers 2 and 3 choose to travel to Ground.
 
----
+## Floor number convention
+
+the solution assumes European/Australasian floor number convention, i.e.: floor 0 is G floor
 
 ## Design Patterns, Principles, and Practices
 
@@ -26,22 +28,12 @@
 - [client agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>)
 - [Monorepo](https://en.wikipedia.org/wiki/Monorepo)
 
----
-
 ## Project Structure
-
----
 
 ## Data Models
 
----
-
 ## Run
 
----
-
 ## Test
-
----
 
 ## TODO
