@@ -1,5 +1,5 @@
 import Building from './building';
-import Elevator from './elevator';
+import Elevator from '../elevator/elevator';
 
 describe('Building', () => {
   let building: Building;

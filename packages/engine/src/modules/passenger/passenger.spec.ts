@@ -2,10 +2,10 @@ import Passenger from './passenger';
 import { randomInteger } from '@utils/random-integer';
 
 describe('Passenger', () => {
-  describe('randomPassenger()', () => {
+  describe('samplePassenger()', () => {
     it('should generate a Passenger instance', () => {
       const buildingFloors = randomInteger(0, 500);
-      const passenger = Passenger.randomPassenger(buildingFloors);
+      const passenger = Passenger.samplePassenger(buildingFloors);
 
       expect(passenger).not.toBeNull();
 
@@ -19,7 +19,7 @@ describe('Passenger', () => {
     });
 
     it('should ensure origin floor and destination floor are not same', () => {
-      const passenger = Passenger.randomPassenger(2);
+      const passenger = Passenger.samplePassenger(2);
 
       expect(passenger.originFloor).not.toEqual(passenger.destinationFloor);
     });
@@ -27,7 +27,7 @@ describe('Passenger', () => {
 
   it('should throw an error if building floors are less than 2', () => {
     expect(() => {
-      Passenger.randomPassenger(1);
+      Passenger.samplePassenger(1);
     }).toThrowError();
   });
 });

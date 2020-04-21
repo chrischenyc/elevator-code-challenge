@@ -27,8 +27,6 @@ the solution assumes European/Australasian floor number convention, i.e.: floor 
 - [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) & [SOLID](https://en.wikipedia.org/wiki/SOLID)
 - [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
 - [event loop](https://en.wikipedia.org/wiki/Event_loop)
-- [state machine](https://en.wikipedia.org/wiki/Finite-state_machine)
-- [client agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>)
 
 ## Project Structure
 

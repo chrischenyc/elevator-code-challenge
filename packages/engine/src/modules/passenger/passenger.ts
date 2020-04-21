@@ -9,7 +9,7 @@ class Passenger {
     this.destinationFloor = destinationFloor;
   }
 
-  public static randomPassenger(buildingFloors: number): Passenger {
+  public static samplePassenger(buildingFloors: number): Passenger {
     if (buildingFloors <= 1) {
       throw new Error('Passenger: invalid building floors');
     }

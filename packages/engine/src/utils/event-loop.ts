@@ -3,7 +3,7 @@ class EventLoop {
   private readonly interval: number;
   private timeout?: NodeJS.Timeout;
 
-  constructor(action: VoidFunction, interval = 1) {
+  constructor(action: VoidFunction, interval = 1000) {
     if (interval <= 0) {
       throw new Error('EventLoop: please user interval greater than 0');
     }

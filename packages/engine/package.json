@@ -10,7 +10,8 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "uuid": "^7.0.3"
+    "uuid": "^7.0.3",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
