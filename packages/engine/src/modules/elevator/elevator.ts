@@ -195,7 +195,23 @@ class Elevator {
 
     // check if a loading/unloading is required on the current floor and transit to LOADING status
     const passengersToUnload = this.passengers.filter(passenger => passenger.destinationFloor === this.floor);
-    const passengersWaiting = this.queue.filter(passenger => passenger.originFloor === this.floor);
+    const passengersWaiting = this.queue.filter(passenger => {
+      // ignore passenger not waiting on the current floor
+      if (passenger.originFloor !== this.floor) {
+        return false;
+      }
+
+      // ignore passenger going in the opposite direction
+      if (
+        (this.direction === ElevatorDirection.UP && passenger.originFloor > passenger.destinationFloor) ||
+        (this.direction === ElevatorDirection.DOWN && passenger.originFloor < passenger.destinationFloor)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
     if (passengersToUnload.length > 0 || passengersWaiting.length > 0) {
       this.status = ElevatorStatus.LOADING;
       this.direction = undefined;
