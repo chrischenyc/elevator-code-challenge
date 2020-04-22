@@ -21,7 +21,7 @@
 
 the solution assumes European/Australasian floor number convention, i.e.: floor 0 is G floor
 
-## Patterns & Principles
+## Design Patterns & Principles
 
 - [Monorepo](https://en.wikipedia.org/wiki/Monorepo)
 - [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) & [SOLID](https://en.wikipedia.org/wiki/SOLID)
@@ -30,12 +30,17 @@ the solution assumes European/Australasian floor number convention, i.e.: floor 
 
 ## Project Structure
 
-TODO
+```
+.
+└── packages
+    ├── engine  // core logic module and unit tests
+    └── web     // demo React web client
+```
 
 ## Data Models
 
-TODO
+![elevator-code-challenge-models](elevator-code-challenge-models.png)
 
-## Run
+## Elevator Workflow
 
-TODO
+![elevator-code-challenge-flow](elevator-code-challenge-flow.png)

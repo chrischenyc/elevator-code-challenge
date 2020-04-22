@@ -1,0 +1,23 @@
+{
+  "name": "elevator-code-challenge-web",
+  "version": "1.0.0",
+  "description": "elevator code challenge typescript solution - demo React web client",
+  "repository": "https://github.com/chrischenyc/elevator-code-challenge",
+  "author": "Chris Chen (chris@capturedlabs.com)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "9.3.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.2",
+    "@types/react": "^16.9.34",
+    "typescript": "^3.8.3"
+  }
+}

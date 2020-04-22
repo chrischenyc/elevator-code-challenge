@@ -1,8 +1,9 @@
 {
-  "name": "engine",
+  "name": "elevator-code-challenge-engine",
   "version": "1.0.0",
-  "description": "core algorithm, client-agnostic",
-  "author": "Chris Chen (chris@capturelabs.com)",
+  "description": "elevator code challenge typescript solution - core module with tests",
+  "repository": "https://github.com/chrischenyc/elevator-code-challenge",
+  "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
   "scripts": {
     "test": "jest --runInBand --forceExit --detectOpenHandles",
