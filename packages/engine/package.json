@@ -10,12 +10,13 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "uuid": "^7.0.3",
+    "shortid": "^2.2.15",
     "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.0",
+    "@types/shortid": "^0.0.29",
     "@types/uuid": "^7.0.2",
     "jest": "^25.3.0",
     "ts-jest": "^25.4.0",

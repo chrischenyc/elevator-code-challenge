@@ -20,6 +20,7 @@ module.exports = {
     'no-console': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
   overrides: [
     {

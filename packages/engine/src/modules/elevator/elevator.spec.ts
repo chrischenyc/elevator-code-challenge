@@ -2,7 +2,7 @@ import Elevator, { ElevatorStatus, ElevatorDirection } from './elevator';
 import Passenger from '@modules/passenger/passenger';
 
 describe('Elevator', () => {
-  describe.skip('sampleElevator()', () => {
+  describe('sampleElevator()', () => {
     it('should generate a sample elevator', () => {
       const sampleElevator = Elevator.sampleElevator();
       expect(sampleElevator).not.toBeNull();
@@ -22,7 +22,7 @@ describe('Elevator', () => {
     });
   });
 
-  describe.skip('constructor', () => {
+  describe('constructor', () => {
     it('should instantiate an elevator instance with given specs', () => {
       const elevator = new Elevator(15, 2, 15);
       expect(elevator.capacity).toEqual(15);
@@ -37,7 +37,7 @@ describe('Elevator', () => {
     });
   });
 
-  describe.skip('startOperation()', () => {
+  describe('startOperation()', () => {
     let elevator: Elevator;
 
     beforeAll(() => {
@@ -63,7 +63,7 @@ describe('Elevator', () => {
     });
   });
 
-  describe.skip('stopOperation()', () => {
+  describe('stopOperation()', () => {
     let elevator: Elevator;
 
     beforeEach(() => {
@@ -85,7 +85,7 @@ describe('Elevator', () => {
     });
   });
 
-  describe.skip('elevatorToEnqueue()', () => {
+  describe('elevatorToEnqueue()', () => {
     const floors = 10;
     const elevator1 = Elevator.sampleElevator();
     const elevator2 = Elevator.sampleElevator();
@@ -193,38 +193,71 @@ describe('Elevator', () => {
     });
   });
 
-  describe('elevator state', () => {
+  describe('elevator status event-loop', () => {
     let elevator: Elevator;
-    beforeAll(() => {
-      // * max capacity: 10 passengers
-      // * floorSpeed: 2 seconds / floor
-      // * loading time: 10 seconds
+
+    beforeEach(() => {
       elevator = Elevator.sampleElevator();
       elevator.maxFloor = 10;
       elevator.startOperation();
     });
 
-    afterAll(() => {
+    afterEach(() => {
       elevator.stopOperation();
     });
 
     it('should stay IDLE if no passenger is waiting', async () => {
       await new Promise(r => setTimeout(r, 2000));
+
       expect(elevator.status).toEqual(ElevatorStatus.IDLE);
       expect(elevator.direction).toBeUndefined();
       expect(elevator.floor).toEqual(0);
-    });
+    }, 2000);
 
     it('should move to a waiting passenger', async () => {
-      elevator.enqueue(new Passenger(5, 9));
+      // idle
+
+      // new passenger is waiting
+      const originFloor = 3;
+      const destinationFloor = 0;
+      const passenger = new Passenger(originFloor, destinationFloor);
+      elevator.enqueue(passenger);
+      await new Promise(r => setTimeout(r, 1000));
+
+      // moving up
       expect(elevator.status).toEqual(ElevatorStatus.MOVING);
       expect(elevator.direction).toEqual(ElevatorDirection.UP);
-    });
+      await new Promise(r => setTimeout(r, elevator.floorSpeed * Math.abs(originFloor - destinationFloor)));
+      // expect(elevator.floor).toEqual(originFloor);
 
-    it('should loading passenger on floor 5', async () => {
-      await new Promise(r => setTimeout(r, 2000));
-      expect(elevator.status).toEqual(ElevatorStatus.LOADING);
-      expect(elevator.direction).toEqual(ElevatorDirection.UP);
-    });
+      elevator.enqueue(new Passenger(2, 1));
+
+      // loading
+      // expect(elevator.status).toEqual(ElevatorStatus.LOADING);
+      // expect(elevator.direction).toBeUndefined();
+      // await new Promise(r => setTimeout(r, elevator.loadingSpeed));
+      // expect(elevator.passengers).toEqual([passenger]);
+      // expect(elevator.queue).toEqual([]);
+
+      // moving down
+      // expect(elevator.status).toEqual(ElevatorStatus.MOVING);
+      // expect(elevator.direction).toEqual(ElevatorDirection.DOWN);
+      // await new Promise(r => setTimeout(r, elevator.floorSpeed * Math.abs(originFloor - destinationFloor)));
+      // expect(elevator.floor).toEqual(destinationFloor);
+
+      // unloading
+      // expect(elevator.status).toEqual(ElevatorStatus.LOADING);
+      // expect(elevator.direction).toBeUndefined();
+      // await new Promise(r => setTimeout(r, elevator.loadingSpeed));
+      // expect(elevator.passengers).toEqual([]);
+      // expect(elevator.queue).toEqual([]);
+
+      // idle
+      await new Promise(r => setTimeout(r, 15000));
+
+      // expect(elevator.status).toEqual(ElevatorStatus.IDLE);
+      // expect(elevator.direction).toBeUndefined();
+      // expect(elevator.floor).toEqual(0);
+    }, 300000);
   });
 });

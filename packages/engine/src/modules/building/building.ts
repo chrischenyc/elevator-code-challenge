@@ -7,23 +7,23 @@ class Building {
   public readonly elevators: Elevator[] = [];
   public readonly queue: Passenger[] = []; // FIFO queue
 
-  private readonly eventLoop: EventLoop = new EventLoop(this.eventLoopAction); // keeps dispatching passengers in queue
+  private readonly eventLoop: EventLoop = new EventLoop(this.eventLoopAction.bind(this)); // keeps dispatching passengers in queue
 
   constructor(floors: number) {
     this.floors = floors;
   }
 
-  public startOperation(): void {
+  public startOperation() {
     this.eventLoop.start();
     this.elevators.forEach(elevator => elevator.startOperation());
   }
 
-  public stopOperation(): void {
+  public stopOperation() {
     this.elevators.forEach(elevator => elevator.stopOperation());
     this.eventLoop.stop();
   }
 
-  public addElevator(elevator: Elevator): void {
+  public addElevator(elevator: Elevator) {
     if (this.elevators.find(elevator => elevator.id === elevator.id)) {
       throw new Error(`Building: elevator ${elevator.id} has already been installed`);
     }
@@ -32,7 +32,7 @@ class Building {
     elevator.maxFloor = this.floors - 1;
   }
 
-  public removeElevator(elevator: Elevator): void {
+  public removeElevator(elevator: Elevator) {
     if (!this.elevators.includes(elevator)) {
       throw new Error(`Building: elevator ${elevator.id} hasn't been installed`);
     }
@@ -40,18 +40,18 @@ class Building {
     this.elevators.splice(this.elevators.indexOf(elevator), 1);
   }
 
-  public enqueue(passenger: Passenger): void {
+  public enqueue(passenger: Passenger) {
     this.queue.push(passenger);
   }
 
-  private dequeuePassenger(passenger: Passenger): void {
+  private dequeuePassenger(passenger: Passenger) {
     this.queue.splice(this.queue.indexOf(passenger), 1);
   }
 
   /**
-   * the event loop keeps dispatching the waiting passenger(s) to the most suitable elevator(s)
+   * the event loop trying to dispatch the waiting passengers to the most suitable elevators
    */
-  private eventLoopAction(): void {
+  private eventLoopAction() {
     this.queue.forEach(passenger => {
       const elevator = Elevator.elevatorToEnqueue(this.elevators, passenger);
 
