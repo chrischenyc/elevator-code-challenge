@@ -6,6 +6,7 @@
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
   "scripts": {
+    "test": "cd packages/engine && yarn && yarn test:scenarios",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --fix"
   },
   "devDependencies": {
