@@ -1,15 +1,18 @@
 {
-  "name": "elevator-code-challenge-engine",
+  "name": "@elevator-challenge/engine",
   "version": "1.0.0",
   "description": "elevator code challenge typescript solution - core module with tests",
   "repository": "https://github.com/chrischenyc/elevator-code-challenge",
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
+  "private": true,
+  "main": "dist/src/index.js",
   "scripts": {
     "test": "jest --runInBand --forceExit --detectOpenHandles",
     "test:scenarios": "jest --runInBand src/__test__/scenarios.spec.ts",
     "test:watch": "jest --runInBand --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "index:generate": "cti create -b ./src"
   },
   "dependencies": {
     "shortid": "^2.2.15",
@@ -20,6 +23,7 @@
     "@types/node": "^13.13.0",
     "@types/shortid": "^0.0.29",
     "@types/uuid": "^7.0.2",
+    "create-ts-index": "^1.13.2",
     "jest": "^25.3.0",
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3",

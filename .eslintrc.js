@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     'no-console': 'error',
+    'react/prop-types': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

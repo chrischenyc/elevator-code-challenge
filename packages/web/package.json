@@ -1,5 +1,5 @@
 {
-  "name": "elevator-code-challenge-web",
+  "name": "@elevator-challenge/web",
   "version": "1.0.0",
   "description": "elevator code challenge typescript solution - demo React web client",
   "repository": "https://github.com/chrischenyc/elevator-code-challenge",
@@ -8,16 +8,20 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "index:generate": "cti create -b ./"
   },
   "dependencies": {
     "next": "9.3.5",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "styled-components": "^5.1.0",
+    "@elevator-challenge/engine": "1.0.0"
   },
   "devDependencies": {
     "@types/node": "^13.13.2",
     "@types/react": "^16.9.34",
+    "create-ts-index": "^1.13.2",
     "typescript": "^3.8.3"
   }
 }

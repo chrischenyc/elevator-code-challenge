@@ -6,11 +6,14 @@
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
   "scripts": {
-    "test": "cd packages/engine && yarn && yarn test:scenarios",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix"
+    "test": "yarn lerna run test",
+    "index:generate": "yarn lerna run index:generate"
   },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "lerna": "^3.20.2",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "eslint": "^6.1.0",
@@ -21,7 +24,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-simple-import-sort": "^5.0.2",
-    "husky": "^4.0.10",
+    "husky": "^4.2.5",
+    "lerna": "^3.20.2",
     "lint-staged": "^10.0.0",
     "prettier": "^1.18.2",
     "typescript": "^3.2.4"
