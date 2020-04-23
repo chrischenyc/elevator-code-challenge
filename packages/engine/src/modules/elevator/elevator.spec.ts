@@ -1,4 +1,4 @@
-import Elevator, { ElevatorStatus, ElevatorDirection } from './elevator';
+import Elevator, { ElevatorStatus, Direction } from './elevator';
 import Passenger from '@modules/passenger/passenger';
 
 describe('Elevator', () => {
@@ -128,7 +128,7 @@ describe('Elevator', () => {
       elevator1.floor = 4;
 
       elevator2.status = ElevatorStatus.MOVING;
-      elevator2.direction = ElevatorDirection.UP;
+      elevator2.direction = Direction.UP;
       elevator2.floor = 2;
       elevator2.passengers = [
         Passenger.samplePassenger(floors),
@@ -144,12 +144,12 @@ describe('Elevator', () => {
       ];
 
       elevator3.status = ElevatorStatus.MOVING;
-      elevator3.direction = ElevatorDirection.UP;
+      elevator3.direction = Direction.UP;
       elevator3.floor = 3;
       elevator3.passengers = [Passenger.samplePassenger(floors), Passenger.samplePassenger(floors)];
 
       elevator4.status = ElevatorStatus.MOVING;
-      elevator4.direction = ElevatorDirection.DOWN;
+      elevator4.direction = Direction.DOWN;
       elevator4.floor = 7;
       elevator4.passengers = [Passenger.samplePassenger(floors), Passenger.samplePassenger(floors)];
 
@@ -163,7 +163,7 @@ describe('Elevator', () => {
       elevator1.floor = 4;
 
       elevator2.status = ElevatorStatus.MOVING;
-      elevator2.direction = ElevatorDirection.UP;
+      elevator2.direction = Direction.UP;
       elevator2.floor = 2;
       elevator2.passengers = [
         Passenger.samplePassenger(floors),
@@ -179,12 +179,12 @@ describe('Elevator', () => {
       ];
 
       elevator3.status = ElevatorStatus.MOVING;
-      elevator3.direction = ElevatorDirection.DOWN;
+      elevator3.direction = Direction.DOWN;
       elevator3.floor = 3;
       elevator3.passengers = [Passenger.samplePassenger(floors), Passenger.samplePassenger(floors)];
 
       elevator4.status = ElevatorStatus.MOVING;
-      elevator4.direction = ElevatorDirection.DOWN;
+      elevator4.direction = Direction.DOWN;
       elevator4.floor = 7;
       elevator4.passengers = [Passenger.samplePassenger(floors), Passenger.samplePassenger(floors)];
 

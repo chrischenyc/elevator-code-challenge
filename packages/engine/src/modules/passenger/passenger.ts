@@ -1,8 +1,13 @@
 import { randomInteger } from '@utils/random-integer';
+import { Direction } from '@modules/elevator/elevator';
 
 class Passenger {
   public readonly originFloor: number;
   public readonly destinationFloor: number;
+
+  public get direction(): Direction {
+    return this.originFloor > this.destinationFloor ? Direction.DOWN : Direction.UP;
+  }
 
   constructor(originFloor: number, destinationFloor: number) {
     this.originFloor = originFloor;

@@ -9,7 +9,7 @@ export enum ElevatorStatus {
   LOADING = 'Loading',
 }
 
-export enum ElevatorDirection {
+export enum Direction {
   UP = 'Up',
   DOWN = 'Down',
 }
@@ -25,9 +25,9 @@ class Elevator {
   public maxFloor = 0;
   public floor = 0; // floor a idle/loading elevator is staying on, or the next floor a moving elevator is approaching
   public status: ElevatorStatus = ElevatorStatus.NOT_IN_SERVICE;
-  public direction?: ElevatorDirection;
+  public direction?: Direction;
   public passengers: Passenger[] = []; // passengers currently riding the elevator
-  public queue: Passenger[] = []; // queue for the passengers waiting to ride this elevator
+  public queue: Passenger[] = []; // First-In-First-Serve queue for the passengers waiting to ride this elevator
 
   //
   /**
@@ -43,11 +43,11 @@ class Elevator {
   /**
    * client can call this factory method to quickly generate sample elevator instance with following specs:
    * max capacity: 10 passengers
-   * floorSpeed: 1.25 seconds / floor
-   * loading time: 2.5 seconds
+   * floorSpeed: 1.00 seconds / floor
+   * loading time: 2.00 seconds
    */
   public static sampleElevator(): Elevator {
-    return new Elevator(10, 1250, 2500);
+    return new Elevator(10, 1000, 2000);
   }
 
   public startOperation() {
@@ -110,12 +110,11 @@ class Elevator {
           return Number.MAX_SAFE_INTEGER;
         }
 
-        const passengerDirection = passenger.originFloor > passenger.destinationFloor ? ElevatorDirection.DOWN : ElevatorDirection.UP;
         if (
           this.direction &&
-          this.direction === passengerDirection &&
-          ((this.direction === ElevatorDirection.DOWN && this.floor > passenger.originFloor) ||
-            (this.direction === ElevatorDirection.UP && this.floor < passenger.originFloor))
+          this.direction === passenger.direction &&
+          ((this.direction === Direction.DOWN && this.floor > passenger.originFloor) ||
+            (this.direction === Direction.UP && this.floor < passenger.originFloor))
         ) {
           return Math.abs(passenger.originFloor - this.floor) * this.floorSpeed;
         }
@@ -146,23 +145,23 @@ class Elevator {
    * core logic to orchestrate elevator status transitions
    */
   private async evaluateStatus() {
-    logger.info(`Elevator ${this.id}: ${this.status} ${this.direction || ''} floor ${this.floor}`);
-
     switch (this.status) {
       case ElevatorStatus.IDLE:
+        logger.info(`Elevator ${this.id}: ${this.status}, floor ${this.floor}`);
         await this.handleIdleStatus();
         break;
 
       case ElevatorStatus.MOVING:
+        logger.info(`Elevator ${this.id}: ${this.status} ${this.direction || ''}, floor ${this.floor}`);
         this.handleMovingStatus();
         break;
 
       case ElevatorStatus.LOADING:
+        logger.info(`Elevator ${this.id}: ${this.status}, floor ${this.floor}`);
         this.handleLoadingStatus();
         break;
 
       case ElevatorStatus.NOT_IN_SERVICE:
-        // return to break the event loop
         return;
     }
   }
@@ -175,11 +174,10 @@ class Elevator {
       // someone is waiting on the elevator's floor, start loading immediately
       if (this.queue.find(passenger => passenger.originFloor === this.floor)) {
         this.status = ElevatorStatus.LOADING;
-        this.direction = undefined;
       } else {
         // otherwise, move to the first person in the queue
         this.status = ElevatorStatus.MOVING;
-        this.direction = this.floor > this.queue[0].originFloor ? ElevatorDirection.DOWN : ElevatorDirection.UP;
+        this.direction = this.floor > this.queue[0].originFloor ? Direction.DOWN : Direction.UP;
       }
     }
 
@@ -191,30 +189,14 @@ class Elevator {
     await new Promise(r => setTimeout(r, this.floorSpeed));
 
     // update elevator's current floor
-    this.floor += this.direction === ElevatorDirection.UP ? 1 : -1;
+    this.floor += this.direction === Direction.UP ? 1 : -1;
 
     // check if a loading/unloading is required on the current floor and transit to LOADING status
     const passengersToUnload = this.passengers.filter(passenger => passenger.destinationFloor === this.floor);
-    const passengersWaiting = this.queue.filter(passenger => {
-      // ignore passenger not waiting on the current floor
-      if (passenger.originFloor !== this.floor) {
-        return false;
-      }
+    const passengersToLoad = this.passengersToLoad();
 
-      // ignore passenger going in the opposite direction
-      if (
-        (this.direction === ElevatorDirection.UP && passenger.originFloor > passenger.destinationFloor) ||
-        (this.direction === ElevatorDirection.DOWN && passenger.originFloor < passenger.destinationFloor)
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-
-    if (passengersToUnload.length > 0 || passengersWaiting.length > 0) {
+    if (passengersToUnload.length > 0 || passengersToLoad.length > 0) {
       this.status = ElevatorStatus.LOADING;
-      this.direction = undefined;
     }
 
     await this.evaluateStatus();
@@ -228,20 +210,7 @@ class Elevator {
     this.passengers = this.passengers.filter(passenger => passenger.destinationFloor !== this.floor);
 
     // load passengers waiting on current floor and going in same direction as the elevator
-    for (const passenger of this.queue) {
-      // ignore passenger not waiting on the current floor
-      if (passenger.originFloor !== this.floor) {
-        continue;
-      }
-
-      // ignore passenger going in the opposite direction
-      if (
-        (this.direction === ElevatorDirection.UP && passenger.originFloor > passenger.destinationFloor) ||
-        (this.direction === ElevatorDirection.DOWN && passenger.originFloor < passenger.destinationFloor)
-      ) {
-        continue;
-      }
-
+    for (const passenger of this.passengersToLoad()) {
       // elevator is full
       if (this.passengers.length === this.capacity) {
         break;
@@ -262,10 +231,65 @@ class Elevator {
       // resume MOVING status, in the direction of the first passenger
       this.status = ElevatorStatus.MOVING;
       const passenger = this.passengers[0];
-      this.direction = passenger.destinationFloor > passenger.originFloor ? ElevatorDirection.UP : ElevatorDirection.DOWN;
+      this.direction = passenger.destinationFloor > passenger.originFloor ? Direction.UP : Direction.DOWN;
     }
 
     await this.evaluateStatus();
+  }
+
+  /**
+   * Based on elevator's run-time values, determine if a passenger can be loaded on the current floor.
+   * The potential loading shouldn't affect First-In-First-Serve principle of the waiting queue
+   */
+  private passengersToLoad(): Passenger[] {
+    const passengersToLoad: Passenger[] = [];
+
+    let maxFloorBeforeGoDown: number | undefined;
+    let minFloorBeforeGoUP: number | undefined;
+
+    for (const passenger of this.queue) {
+      logger.debug(
+        `floor ${this.floor} minFloorBeforeGoUP ${minFloorBeforeGoUP || '--'} maxFloorBeforeGoDown ${maxFloorBeforeGoDown || '--'}`,
+      );
+
+      // ignore passenger not waiting on the current floor
+      if (passenger.originFloor === this.floor) {
+        // passenger is going in the same direction as elevator's current direction
+        if (!this.direction || passenger.direction === this.direction) {
+          // consider loading this passenger if the destination floor won't affect other passengers ahead in the waiting queue
+          if (
+            (passenger.direction === Direction.UP && (!maxFloorBeforeGoDown || passenger.destinationFloor <= maxFloorBeforeGoDown)) ||
+            (passenger.direction === Direction.DOWN && (!minFloorBeforeGoUP || passenger.destinationFloor >= minFloorBeforeGoUP))
+          ) {
+            logger.debug('Eligible passenger to load', passenger);
+            passengersToLoad.push(passenger);
+          }
+        }
+        // passenger is going in the opposite direction as elevator's current direction
+        else {
+          // consider loading this passenger if the elevator can turn around without affecting passengers riding it and passengers ahead in the waiting queue
+          if (
+            this.passengers.length === 0 &&
+            ((passenger.direction === Direction.UP && (!minFloorBeforeGoUP || minFloorBeforeGoUP > this.floor)) ||
+              (passenger.direction === Direction.DOWN && (!maxFloorBeforeGoDown || maxFloorBeforeGoDown <= this.floor)))
+          ) {
+            logger.debug('Eligible passenger to load', passenger);
+            passengersToLoad.push(passenger);
+          }
+        }
+      }
+
+      // this waiting passenger's priority is higher than the following ones in the queue
+      if (passenger.direction === Direction.DOWN && (!maxFloorBeforeGoDown || passenger.originFloor < maxFloorBeforeGoDown)) {
+        maxFloorBeforeGoDown = passenger.originFloor;
+      }
+
+      if (passenger.direction === Direction.UP && (!minFloorBeforeGoUP || passenger.originFloor > minFloorBeforeGoUP)) {
+        minFloorBeforeGoUP = passenger.originFloor;
+      }
+    }
+
+    return passengersToLoad;
   }
 }
 

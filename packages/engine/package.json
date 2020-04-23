@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --runInBand --forceExit --detectOpenHandles",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --runInBand --watch",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
