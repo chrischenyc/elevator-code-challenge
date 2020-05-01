@@ -2,7 +2,6 @@
 
 [![CI/CD](https://github.com/chrischenyc/elevator-code-challenge/workflows/CI/CD/badge.svg?branch=master)](https://github.com/chrischenyc/elevator-code-challenge/actions)
 [![codecov](https://codecov.io/gh/chrischenyc/elevator-code-challenge/branch/master/graph/badge.svg)](https://codecov.io/gh/chrischenyc/elevator-code-challenge)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 
 ## Problem
 
@@ -53,7 +52,8 @@ make sure [yarn](https://yarnpkg.com) is installed
 
 ```bash
 yarn
-yarn test
+yarn test # all unit test
+yarn test:scenarios # test the main testing scenarios with console output
 ```
 
 test output

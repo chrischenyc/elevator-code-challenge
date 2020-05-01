@@ -6,13 +6,14 @@
   "author": "Chris Chen (chris@capturedlabs.com)",
   "license": "MIT",
   "scripts": {
-    "test": "yarn lerna run test",
-    "index:generate": "yarn lerna run index:generate"
+    "test": "jest --runInBand --forceExit --detectOpenHandles",
+    "test:scenarios": "jest --runInBand src/__test__/scenarios.spec.ts"
   },
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "dependencies": {
+    "shortid": "^2.2.15",
+    "winston": "^3.2.1"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
@@ -25,10 +26,15 @@
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-simple-import-sort": "^5.0.2",
     "husky": "^4.2.5",
-    "lerna": "^3.20.2",
     "lint-staged": "^10.0.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.2.4"
+    "typescript": "^3.2.4",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.0",
+    "@types/shortid": "^0.0.29",
+    "jest": "^25.3.0",
+    "ts-jest": "^25.4.0",
+    "wait-for-expect": "^3.0.2"
   },
   "lint-staged": {
     "*.{js}": [
@@ -42,5 +48,19 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "rootDir": "src",
+    "moduleNameMapper": {
+      "@modules/(.*)$": "<rootDir>/modules/$1",
+      "@utils/(.*)$": "<rootDir>/utils/$1"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage"
   }
 }
